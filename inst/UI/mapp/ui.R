@@ -63,7 +63,17 @@ mappUI <- function(projectName = "", ids) {
         dataTableOutput("summary")
       )),
       miniTabPanel("Help", icon = icon("info-circle"), miniContentPanel(
-        # includeMarkdown("help.md")
+        HTML("
+        <ul>
+        
+        <li>Lines connect most of the points but some outliers (not all) are avoided. </li>
+        <li>Time zone is UTC.</li>
+        <li>The <a style='color:#EE3377'>pulsing dots</a> show the last location for each bird.</li>
+        <li>You can use the tools on the tool-bar to measure distances, areas, etc on the map. </li>
+        
+        </ul>
+
+        ")
       ))
     )
   )

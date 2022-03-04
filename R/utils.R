@@ -23,7 +23,7 @@ speed_along <- function(x, .lat = "latitude", .lon = "longitude", .dt = "locatio
 }
 
 #' @export 
-activity_summary <- function(x) {
+activity_summary <- function(x, trending_N_days = 10) {
 
   # overall summaries
   s <- x[, .(N_pts = .N, First_location = min(locationDate), Last_loc = max(locationDate)),
@@ -33,17 +33,12 @@ activity_summary <- function(x) {
   s[, points_per_day := round(N_pts / days_since_deploy, 1)]
   s <- s[, .(tagID, Last_loc, days_since_deploy, points_per_day)]
 
-  s <- merge(md[, .(id, site, ID, sex, tagID)], s,
-    all.x = TRUE, sort = FALSE, by = "tagID"
-  )
-
-
   # add trending
   x[, date := yday(locationDate)]
 
-  r <- x[date > yday(Sys.Date()) - 30, .N, by = .(tagID, date)]
+  r <- x[date > yday(Sys.Date()) - trending_N_days, .N, by = .(tagID, date)]
 
-  r <- r[, .(trending_30days = {
+  r <- r[, .(trending_N_days = {
     o <- try(lm(N ~ scale(date, scale = FALSE)), silent = TRUE)
     if (inherits(o, "try-error")) {
       o <- as.numeric(NA)
@@ -53,8 +48,11 @@ activity_summary <- function(x) {
     round(o, 1)
   }), by = tagID]
 
+  setnames(r, "trending_N_days", glue("trending_{trending_N_days}_days"))
+
   s <- merge(s, r, all.x = TRUE, sort = FALSE, by = "tagID")
 
   setorder(s, Last_loc)
   s
+
 }

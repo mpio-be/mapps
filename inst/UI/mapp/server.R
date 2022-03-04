@@ -54,6 +54,7 @@ mappServer <- function(input, output, session) {
         ) |>
         setView(lng = xy$X, lat = xy$Y, zoom = 5)
     } 
+  
   })
 
 
@@ -61,6 +62,14 @@ mappServer <- function(input, output, session) {
   # Summary
 
   output$summary <- renderDataTable(options = list(pageLength = 40, searchHighlight = TRUE), {
-    activeData() |> activity_summary()
+  
+  
+    mapp_data(input) |> activity_summary()
+  
+  
   })
+
+
+
+
 }
