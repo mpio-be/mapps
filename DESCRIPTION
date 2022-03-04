@@ -1,0 +1,31 @@
+Package: mapps
+Version: 0.0.1
+Author: Mihai Valcu
+Maintainer: Mihai Valcu <valcu@orn.mpg.de>
+Title: Map apps
+Description: Building blocks for simple map apps using shiny and MariaDB
+License: GPL (>= 2)
+Depends:
+    R (>= 3.0.0),
+    data.table,
+    shiny,
+    RMariaDB
+Imports:
+    methods,
+    glue,
+    stringr,
+    shinytoastr,
+    shinyWidgets,
+    shinybusy,
+    miniUI,
+    leaflet,
+    leaflet.extras,
+    fasttime,
+    geodist,
+    sf
+Suggests:
+    devtools,
+    testthat 
+Roxygen: list(markdown = TRUE)    
+RoxygenNote: 7.1.2
+Encoding: UTF-8
