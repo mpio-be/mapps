@@ -41,12 +41,49 @@ DBq <- function(x,
 }
 
 
-#' db table checksum
+#' last entry in db table (hh:mm:ss hours ago.)
 #' @export
 #' @examples
-#' checksumtab(test)
-#' 
-
-checksumtab <- function(tab) {
-  DBq(glue("CHECKSUM TABLE {tab}"))$Checksum
+#' last_entry(test)
+last_entry <- function(tab) {
+  DBq(glue("
+  SELECT CAST(
+      TIMEDIFF(UTC_TIMESTAMP(), max(locationDate)
+    ) AS CHAR) tdiff from {tab}"))$tdiff
 }
+
+
+
+
+#' UI interface to database
+#' @param input a list containing "mindate", "tagIDs", "locationClass" and LocationDate".
+#'        the input is usually defined within a shiny UI like [mapps::mappUI()].
+#' @export
+  mapp_data <- function(input) {
+    sql <- glue("SELECT DISTINCT tagID, latitude, longitude, locationDate
+              FROM {dbtable} WHERE
+                locationDate >= '{input$mindate}'
+                  ORDER BY locationDate, tagID")
+
+    if (!is.null(input$tagIDs)) {
+      sql <- glue("{sql} AND tagID in ({paste(input$tagIDs, collapse = ',')})")
+    }
+
+    if (!is.null(input$locationClass)) {
+      sql <- glue("{sql} AND locationClass in ({paste(input$locationClass|>shQuote(), collapse = ',')})")
+    }
+
+    x <- DBq(sql)
+
+    x[, label := glue_data(.SD, "{tagID} <br> {format(locationDate, '%d-%b-%y %H:%M')} ")]
+
+    cols = c(
+      "#059c6f", "#D95F02", "#382fb3", "#E7298A", "#5cac02", "#f7b603",
+      "#a06c0a", "#0e0000", "#e02807"
+    ) |>
+      colorRampPalette()
+
+    z <- x[, .N, tagID][, col := cols(.N)][, N := NULL]
+
+    merge(x, z, by = "tagID", sort = FALSE)
+  }

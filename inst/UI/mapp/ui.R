@@ -3,25 +3,22 @@
 mappUI <- function(projectName = "", ids) {
   miniPage(
     title = projectName,
+    
     useToastr(),
-    add_busy_spinner(
-      position = "top-left",
-      spin = "radar",
-      color = "#d1360f",
-      onstart = FALSE,
-      margins = c(20, 50)
-    ),
+
     miniTitleBar(projectName,
-      left =
-        textOutput("lastUpdate", a),
+      
+      left = htmlOutput(outputId = "lastUpdate") , 
+
+
       right =
 
         dropdown(
           right = TRUE,
           size = "lg",
           style = "stretch",
-          status = "primary",
-          icon = icon("cogs"),
+          status = "success",
+          icon = icon("cogs") ,
           
           airDatepickerInput("mindate", NULL,
             dateFormat = "dd-mm-yy",
@@ -36,14 +33,14 @@ mappUI <- function(projectName = "", ids) {
             selected = c(0:3, "A", "B"),
             status = "  ",
             justified = TRUE,
-            checkIcon = list(yes = icon("check-square"), no = icon("square-o"))
+            checkIcon = list(yes = icon("check-square"), no = icon("square"))
           ),
           pickerInput(
             inline = FALSE,
             inputId = "tagIDs",
             label = NULL,
-            choices = ids$tagID,
-            selected = ids$tagID,
+            choices = ids,
+            selected = ids,
             multiple = TRUE,
             options = pickerOptions(
               virtualScroll = TRUE,
@@ -55,9 +52,10 @@ mappUI <- function(projectName = "", ids) {
         )
     ),
     miniTabstripPanel(
-      miniTabPanel("Map", icon = icon("map-o"), miniContentPanel(
+      miniTabPanel("Map", icon = icon("map"), miniContentPanel(
         padding = 0,
-        leafletOutput("MAP", width = "100%", height = "100%")
+        leafletOutput("MAP", width = "100%", height = "100%") |>
+          addSpinner(spin = "circle", color = "#093a72")
       )),
       miniTabPanel("Summary", icon = icon("table"), miniContentPanel(
         dataTableOutput("summary")
@@ -68,7 +66,7 @@ mappUI <- function(projectName = "", ids) {
         
         <li>Lines connect most of the points but some outliers (not all) are avoided. </li>
         <li>Time zone is UTC.</li>
-        <li>The <a style='color:#EE3377'>pulsing dots</a> show the last location for each bird.</li>
+        <li>The <a style='color:#EE3377'>pulsing dots</a> show the last location for each individual.</li>
         <li>You can use the tools on the tool-bar to measure distances, areas, etc on the map. </li>
         
         </ul>

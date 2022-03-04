@@ -16,7 +16,6 @@ Imports:
     stringr,
     shinytoastr,
     shinyWidgets,
-    shinybusy,
     miniUI,
     leaflet,
     leaflet.extras,

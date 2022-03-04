@@ -22,7 +22,9 @@ speed_along <- function(x, .lat = "latitude", .lon = "longitude", .dt = "locatio
   }
 }
 
+#' activity summary for ARGOS datasets
 #' @export 
+#' @note x should contain locationDate (POSIXct) and tagID
 activity_summary <- function(x, trending_N_days = 10) {
 
   # overall summaries

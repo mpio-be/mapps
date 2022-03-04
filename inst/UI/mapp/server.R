@@ -9,26 +9,30 @@
 #' @param session   Shiny server
 #'
 #' @export
-#' @note hardwired objects expected to be defined in global.R: dbtable
+#' @note hardwired objects expected to be defined in global.R: dbtable, tiles, logo, url
 #'
 mappServer <- function(input, output, session) {
   observe(on.exit(assign("input", reactiveValuesToList(input), envir = .GlobalEnv)))
 
+  output$lastUpdate <- renderUI({
+    invalidateLater(120000, session)
 
-  output$lastUpdate <- renderText({
-    invalidateLater(1500, session)
+    glue('
+    Last entry
+    <span class="badge">
+    {last_entry(dbtable)}
+    </span>
+    hours ago.') |> HTML()
     
-    paste("Next update in zzz" )
   })
 
+  autoInvalidate <- reactiveTimer(120000) # reset map after two mins of inactivity
 
-  map <- leaflet_map()
-
-
+  map <- leaflet_map(tiles = tiles, logo = logo, url = url)
 
   output$MAP <- renderLeaflet(map)
 
-  observeEvent(list(input$mindate, input$tagIDs, input$locationClass), {
+  observeEvent(list(input$mindate, input$IDs, input$locationClass, autoInvalidate() ), {
 
     # DATA
     d <- mapp_data(input)
@@ -38,11 +42,13 @@ mappServer <- function(input, output, session) {
       p = mapp_points(d)
       xy = mapp_centre(d)
       last_pts = mapp_last_points(d)
+      lines_ = map_lines(p)
 
       # MAP
       leafletProxy("MAP") |>
         clearMarkers() |>
         clearShapes() |>
+        addPolylines(data = lines_, weight = 2, color = ~col) |>
         addCircleMarkers(
           data = p, color = ~col, radius = 2,
           fillOpacity = 0.5, opacity = 0.5, popup = ~label
