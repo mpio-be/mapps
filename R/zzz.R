@@ -20,9 +20,14 @@ NULL
 
 
 
-#' @import data.table shiny RMariaDB methods glue stringr shinytoastr shinyWidgets shinybusy miniUI leaflet leaflet.extras fasttime geodist sf 
+#' @import data.table  RMariaDB methods glue sf
+NULL
+#' @import shiny shinyWidgets waiter miniUI leaflet leaflet.extras  
+NULL
+#' @import leaflet leaflet.extras  
 NULL
 
 #' @importFrom geodist geodist
-#' @importFrom shinytoastr toastr_error
+NULL
+#' @importFrom shinytoastr useToastr toastr_error
 NULL

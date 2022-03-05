@@ -1,6 +1,6 @@
 
 #' @export
-mappUI <- function(projectName = "", ids) {
+mappUI <- function(projectName = "", ids, days_before = 30) {
   miniPage(
     title = projectName,
     useToastr(),
@@ -17,7 +17,7 @@ mappUI <- function(projectName = "", ids) {
           icon = icon("cogs"),
           airDatepickerInput("mindate", NULL,
             dateFormat = "dd-mm-yy",
-            value = Sys.Date() - 90,
+            value = Sys.Date() - days_before,
             max = Sys.Date() + 1
           ),
           checkboxGroupButtons(

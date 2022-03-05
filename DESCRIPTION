@@ -13,7 +13,6 @@ Depends:
 Imports:
     methods,
     glue,
-    stringr,
     shinytoastr,
     shinyWidgets,
     miniUI,
