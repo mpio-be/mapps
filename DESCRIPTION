@@ -19,7 +19,7 @@ Imports:
     miniUI,
     leaflet,
     leaflet.extras,
-    fasttime,
+    waiter,
     geodist,
     sf
 Suggests:

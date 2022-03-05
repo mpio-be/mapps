@@ -11,12 +11,12 @@ mapp_centre <- function(x) {
 
 #' @export
 mapp_last_points <- function(x) {
-  x[, last_date := max(locationDate), by = tagID]
-  o <- unique(x[locationDate == last_date, .(latitude, longitude, tagID, last_date)])[, i := 1:.N, tagID]
+  x[, last_date := max(locationDate), by = individual]
+  o <- unique(x[locationDate == last_date, .(latitude, longitude, individual, last_date)])[, i := 1:.N, individual]
   o <- o[i == 1][, i := NULL]
 
 
-  o[, label := paste(tagID,
+  o[, label := paste(individual,
     format(last_date, "%d-%b-%y %H:%M"),
     sep = "<br>"
   )]
@@ -28,7 +28,7 @@ mapp_last_points <- function(x) {
 map_lines <- function(x) {
   # x is mapp_points(d)
   x |>
-    dplyr::group_by(tagID, col) |>
+    dplyr::group_by(individual, col) |>
     dplyr::summarise(do_union = FALSE, .groups = "keep") |>
     sf::st_cast("LINESTRING")
 }

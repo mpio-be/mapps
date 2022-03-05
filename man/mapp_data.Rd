@@ -7,9 +7,12 @@
 mapp_data(input)
 }
 \arguments{
-\item{input}{a list containing "mindate", "tagIDs", "locationClass" and LocationDate".
+\item{input}{a list containing "mindate", "individuals", "locationClass" and LocationDate".
 the input is usually defined within a shiny UI like \code{\link[=mappUI]{mappUI()}}.}
 }
 \description{
 UI interface to database
+}
+\note{
+a 'labels' dataframe should be loaded in global.R
 }

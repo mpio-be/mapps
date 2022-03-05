@@ -10,5 +10,5 @@ activity_summary(x, trending_N_days = 10)
 activity summary for ARGOS datasets
 }
 \note{
-x should contain locationDate (POSIXct) and tagID
+x should contain locationDate (POSIXct) and individual
 }

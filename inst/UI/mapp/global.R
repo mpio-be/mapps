@@ -6,16 +6,12 @@
 sapply(
   c(
     "data.table", "glue",
-    "shiny", "shinytoastr", "shinyWidgets", "shinybusy",
+    "shiny", "shinytoastr", "shinyWidgets", "waiter",
     "miniUI", "leaflet", "leaflet.extras",
      "sf"
   ),
   function(x) require(x, character.only = TRUE, quietly = TRUE)
 )
-
-require(mapps)
-require(glue)
-require(miniUI)
 
 
 # SETTINGS 
@@ -28,10 +24,17 @@ require(miniUI)
   projName = "argos test"
 
 # VARIABLES
-  ids = DBq(glue("SELECT DISTINCT tagID from {dbtable}"))$tagID
-
+  # general
   tiles = "OpenStreetMap.Mapnik"
-  system.file("logo.R", package = "mapps") |> source() # loads logo
-  url = "https://www.bi.mpg.de/kempenaers"
+  
+  f = system.file("mpio_logo.txt", package = "mapps")
+  logo_base64 = readChar(f, file.info(f)$size)
+  
+  URL = "https://www.bi.mpg.de/kempenaers"
+  
 
-# FUNCTIONS
+  # project specific
+  ids = DBq(glue("SELECT DISTINCT tagID from {dbtable}"))$tagID
+  
+  info_path = "md.csv"
+  

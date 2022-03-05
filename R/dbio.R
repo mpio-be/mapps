@@ -30,12 +30,8 @@ DBq <- function(x,
 
   if (inherits(o, "try-error")) {
     err <- as.character(attributes(o)$condition)
-    if (shiny::isRunning()) {
-      toastr_error(err, "Query returned an error")
-
-    }
     return(data.table(error = err))
-  } else {
+    } else {
     return(data.table(o))
   }
 }
@@ -56,26 +52,29 @@ last_entry <- function(tab) {
 
 
 #' UI interface to database
-#' @param input a list containing "mindate", "tagIDs", "locationClass" and LocationDate".
+#' @param input a list containing "mindate", "individuals", "locationClass" and LocationDate".
 #'        the input is usually defined within a shiny UI like [mapps::mappUI()].
+#' @note a 'labels' dataframe should be loaded in global.R
 #' @export
   mapp_data <- function(input) {
-    sql <- glue("SELECT DISTINCT tagID, latitude, longitude, locationDate
+    sql <- glue("SELECT DISTINCT tagID as individual, latitude, longitude, locationDate
               FROM {dbtable} WHERE
-                locationDate >= '{input$mindate}'
-                  ORDER BY locationDate, tagID")
+                locationDate >= '{input$mindate}' ")
 
-    if (!is.null(input$tagIDs)) {
-      sql <- glue("{sql} AND tagID in ({paste(input$tagIDs, collapse = ',')})")
+    if (!is.null(input$individuals)) {
+      sql <- glue("{sql} AND tagID in ({paste(input$individuals, collapse = ',')})")
     }
 
     if (!is.null(input$locationClass)) {
       sql <- glue("{sql} AND locationClass in ({paste(input$locationClass|>shQuote(), collapse = ',')})")
     }
 
+    sql = glue("{sql} ORDER BY locationDate")
+
     x <- DBq(sql)
 
-    x[, label := glue_data(.SD, "{tagID} <br> {format(locationDate, '%d-%b-%y %H:%M')} ")]
+ 
+    x[, label := glue_data(.SD, "{individual} <br> {format(locationDate, '%d-%b-%y %H:%M')} ")]
 
     cols = c(
       "#059c6f", "#D95F02", "#382fb3", "#E7298A", "#5cac02", "#f7b603",
@@ -83,7 +82,7 @@ last_entry <- function(tab) {
     ) |>
       colorRampPalette()
 
-    z <- x[, .N, tagID][, col := cols(.N)][, N := NULL]
+    z <- x[, .N, individual][, col := cols(.N)][, N := NULL]
 
-    merge(x, z, by = "tagID", sort = FALSE)
+    merge(x, z, by = "individual", sort = FALSE)
   }

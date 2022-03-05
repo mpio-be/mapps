@@ -1,7 +1,7 @@
 
 
 #' @export
-speed_along <- function(x, .lat = "latitude", .lon = "longitude", .dt = "locationDate", .grp = "tagID", clean = TRUE) {
+speed_along <- function(x, .lat = "latitude", .lon = "longitude", .dt = "locationDate", .grp = "individual", clean = TRUE) {
   setnames(x, c(.lat, .lon, .dt, .grp), c(".lat", ".lon", ".dt", ".grp"))
   setorder(x, .dt, .grp)
   x[, .deltaT := difftime(.dt,
@@ -24,21 +24,21 @@ speed_along <- function(x, .lat = "latitude", .lon = "longitude", .dt = "locatio
 
 #' activity summary for ARGOS datasets
 #' @export 
-#' @note x should contain locationDate (POSIXct) and tagID
+#' @note x should contain locationDate (POSIXct) and individual
 activity_summary <- function(x, trending_N_days = 10) {
 
   # overall summaries
   s <- x[, .(N_pts = .N, First_location = min(locationDate), Last_loc = max(locationDate)),
-    by = .(tagID)
+    by = .(individual)
   ]
   s[, days_since_deploy := difftime(Last_loc, First_location, units = "days") %>% round(digits = 1) %>% as.numeric()]
   s[, points_per_day := round(N_pts / days_since_deploy, 1)]
-  s <- s[, .(tagID, Last_loc, days_since_deploy, points_per_day)]
+  s <- s[, .(individual, Last_loc, days_since_deploy, points_per_day)]
 
   # add trending
   x[, date := yday(locationDate)]
 
-  r <- x[date > yday(Sys.Date()) - trending_N_days, .N, by = .(tagID, date)]
+  r <- x[date > yday(Sys.Date()) - trending_N_days, .N, by = .(individual, date)]
 
   r <- r[, .(trending_N_days = {
     o <- try(lm(N ~ scale(date, scale = FALSE)), silent = TRUE)
@@ -48,11 +48,11 @@ activity_summary <- function(x, trending_N_days = 10) {
       o <- coef(o)[2]
     }
     round(o, 1)
-  }), by = tagID]
+  }), by = individual]
 
   setnames(r, "trending_N_days", glue("trending_{trending_N_days}_days"))
 
-  s <- merge(s, r, all.x = TRUE, sort = FALSE, by = "tagID")
+  s <- merge(s, r, all.x = TRUE, sort = FALSE, by = "individual")
 
   setorder(s, Last_loc)
   s
