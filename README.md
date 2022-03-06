@@ -1,2 +1,3 @@
+
 ## Map apps
-Building blocks for simple map apps using shiny and MariaDB
+Templates for simple map apps using shiny, leaflet and MariaDB.

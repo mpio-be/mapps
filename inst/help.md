@@ -19,3 +19,6 @@
   
 ### Info
 * This table shows extra information (sex, color combination, etc) on all individuals.   
+
+----
+The source code of this site: https://github.com/mpio-be/mapps
