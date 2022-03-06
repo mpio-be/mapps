@@ -10,20 +10,23 @@
 #'
 
 mappServer <- function(input, output, session) {
-  observe(on.exit(assign("input", reactiveValuesToList(input), envir = .GlobalEnv)))
+  # observe(on.exit(assign("input", reactiveValuesToList(input), envir = .GlobalEnv)))
+  
+  autoInvalidate <- reactiveTimer(120000) # reset map after two mins of inactivity
 
-  output$lastUpdate <- renderUI({
-    invalidateLater(120000, session)
-
-    glue('
-    Last location:
-    <span class="badge">
-    {last_entry(dbtable)}
-    </span>
-    hours ago.') |> HTML()
+  observeEvent(list(input$mindate, autoInvalidate()), {
+  
+  output$upper_left_feedback <- renderUI({
+  
+    lastloc = glue('Last location: <span class="badge">{last_entry(dbtable)}</span> hours ago.')
+    sset = glue(' Showing: last <span class="badge">{(Sys.Date() - as.Date(input$mindate) )}</span> days.')
+    
+    paste(lastloc, sset) |> HTML()
+  
+  })
+   
   })
 
-  autoInvalidate <- reactiveTimer(120000) # reset map after two mins of inactivity
 
   map <- leaflet_map(tiles = tiles, logo_img = logo_base64, logo_url = URL)
 

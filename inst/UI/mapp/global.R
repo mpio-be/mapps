@@ -1,5 +1,5 @@
 
-#' shiny::runApp('./inst/UI/mapp', launch.browser =  TRUE)
+# ll = function() { devtools::load_all(); shiny::runApp('./inst/UI/mapp', launch.browser =  TRUE) }
 # https://fontawesome.com/v5.15/icons?d=gallery&p=2
 
 

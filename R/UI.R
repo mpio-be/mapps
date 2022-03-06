@@ -1,12 +1,13 @@
 
 #' @export
-mappUI <- function(projectName = "", ids, days_before = 30) {
+mappUI <- function(projectName = "", ids, days_before = 30, 
+                  help = system.file('help.md', package = 'mapps') ) {
   miniPage(
     title = projectName,
     useToastr(),
     autoWaiter(),
     miniTitleBar(projectName,
-      left = htmlOutput(outputId = "lastUpdate"),
+      left = htmlOutput(outputId = "upper_left_feedback"),
       right =
 
         dropdown(
@@ -63,17 +64,9 @@ mappUI <- function(projectName = "", ids, days_before = 30) {
         dataTableOutput("info")
       )),
       miniTabPanel("Help", icon = icon("question-circle"), miniContentPanel(
-        HTML("
-        <ul>
 
-        <li>Lines connect most of the points but some outliers (not all) are avoided. </li>
-        <li>Time zone is UTC.</li>
-        <li>The <a style='color:#EE3377'>pulsing dots</a> show the last location for each individual.</li>
-        <li>You can use the tools on the tool-bar to measure distances, areas, etc on the map. </li>
+      includeMarkdown(help)
 
-        </ul>
-
-        ")
       ))
     )
   )
