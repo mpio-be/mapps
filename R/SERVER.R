@@ -18,10 +18,10 @@ mappServer <- function(input, output, session) {
   
   output$upper_left_feedback <- renderUI({
   
-    lastloc = glue('Last location: <span class="badge">{last_entry(dbtable)}</span> hours ago.')
-    sset = glue(' Showing: last <span class="badge">{(Sys.Date() - as.Date(input$mindate) )}</span> days.')
+    lastloc = glue("Last update <strong>{last_entry(dbtable)}</strong> hours ago.")
+    sset = glue(" Last <strong>{(Sys.Date() - as.Date(input$mindate) )}</strong> days.")
     
-    paste(lastloc, sset) |> HTML()
+    glue("<small>{lastloc} {sset}</small>") |> HTML()
   
   })
    

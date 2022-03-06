@@ -11,7 +11,7 @@
   options(mapps.pwd = "testuser")
   dbtable = "argos"
 
-  projName = "ARGOS test"
+  projName = "ARGOS test page ..... "
 
 # VARIABLES
   # general

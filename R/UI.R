@@ -12,7 +12,7 @@ mappUI <- function(projectName = "", ids, days_before = 30,
 
         dropdown(
           right = TRUE,
-          size = "lg",
+          size = "md",
           style = "stretch",
           status = "danger",
           icon = icon("cogs"),
