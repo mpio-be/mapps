@@ -1,7 +1,9 @@
 
 #' @export
 mapp_points <- function(x) {
-  st_as_sf(x, coords = c("longitude", "latitude"), crs = 4326)
+  st_as_sf(x, coords = c("longitude", "latitude"), crs = 4326) |>
+    st_shift_longitude()
+    
 }
 
 #' @export
