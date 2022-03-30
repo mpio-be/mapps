@@ -1,8 +1,15 @@
 
 #' @export
 mapp_points <- function(x) {
-  st_as_sf(x, coords = c("longitude", "latitude"), crs = 4326) |>
-    st_shift_longitude()
+  o = st_as_sf(x, coords = c("longitude", "latitude"), crs = 4326)
+  
+  shiftlon = getOption("mapps.shift_longitude")
+
+  if (!is.null(shiftlon) && shiftlon) {
+    o = st_shift_longitude(o)
+  }
+  
+  o
     
 }
 
