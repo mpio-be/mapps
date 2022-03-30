@@ -39,8 +39,8 @@ mappServer <- function(input, output, session) {
 
     if (nrow(d) > 0) {
       p <- mapp_points(d)
-      xy <- mapp_centre(d)
-      last_pts <- mapp_last_points(d)
+      xy <- mapp_centre(p)
+      last_pts <- mapp_last_points(p)
       lines_ <- map_lines(p)
 
       # MAP
