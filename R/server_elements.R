@@ -8,13 +8,20 @@ mapp_points <- function(x) {
 
 #' @export
 mapp_centre <- function(x) {
-  x[, .(X = median(longitude), Y = median(latitude))]
+  # x is mapp_points(d)
+  st_union(x) |>
+  st_centroid() |>
+  st_coordinates() |>
+  data.frame()
 }
 
 #' @export
 mapp_last_points <- function(x) {
-  x[, last_date := max(locationDate), by = individual]
-  o <- unique(x[locationDate == last_date, .(latitude, longitude, individual, last_date)])[, i := 1:.N, individual]
+  # x is mapp_points(d)
+  z = data.table(x)
+  z[, last_date := max(locationDate), by = individual]
+  z = cbind(z, st_coordinates(x))
+  o <- unique(z[locationDate == last_date, .(latitude=Y, longitude=X, individual, last_date)])[, i := 1:.N, individual]
   o <- o[i == 1][, i := NULL]
 
 
