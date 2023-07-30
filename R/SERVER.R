@@ -9,7 +9,7 @@
 #' @note hardwired objects expected to be defined in global.R: dbtable, tiles, logo_base64, URL, md.csv
 #'
 
-mappServer <- function(input, output, session {
+mappServer <- function(input, output, session) {
   if( getOption("mapps.debug") )
     observe(on.exit(assign("input", reactiveValuesToList(input), envir = .GlobalEnv)))
   
