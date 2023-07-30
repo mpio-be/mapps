@@ -12,10 +12,11 @@ NULL
   packageStartupMessage(paste("This is", pkgname, dcf[, "Version"]))
 
   # see ./inst/install_testdb.sql
-  options(mapps.host = "127.0.0.1")
-  options(mapps.db = "tests")
-  options(mapps.user = "testuser")
-  options(mapps.pwd = "testuser")
+  options(mapps.host  = "127.0.0.1")
+  options(mapps.db    = "tests")
+  options(mapps.user  = "testuser")
+  options(mapps.pwd   = "testuser")
+  options(mapps.debug = FALSE)
 }
 
 

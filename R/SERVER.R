@@ -4,14 +4,13 @@
 #' @param input     Shiny server
 #' @param output    Shiny server
 #' @param session   Shiny server
-#' @param debug     default to FALSE
 #'
 #' @export
 #' @note hardwired objects expected to be defined in global.R: dbtable, tiles, logo_base64, URL, md.csv
 #'
 
-mappServer <- function(input, output, session, debug = FALSE) {
-  if(debug)
+mappServer <- function(input, output, session {
+  if( getOption("mapps.db") )
     observe(on.exit(assign("input", reactiveValuesToList(input), envir = .GlobalEnv)))
   
   autoInvalidate <- reactiveTimer(120000) # reset map after two mins of inactivity

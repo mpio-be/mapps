@@ -8,10 +8,10 @@
 #' DBq("SELECT err")
 #' 
 DBq <- function(x, 
-  host = getOption("mapps.host"), 
-  user = getOption("mapps.user"),
+  host     = getOption("mapps.host"), 
+  user     = getOption("mapps.user"),
   password = getOption("mapps.pwd"),
-  db = getOption("mapps.db")
+  db       = getOption("mapps.db")
   ) {
 
   con <- DBI::dbConnect(MariaDB(),
