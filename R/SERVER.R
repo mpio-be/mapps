@@ -10,7 +10,7 @@
 #'
 
 mappServer <- function(input, output, session {
-  if( getOption("mapps.db") )
+  if( getOption("mapps.debug") )
     observe(on.exit(assign("input", reactiveValuesToList(input), envir = .GlobalEnv)))
   
   autoInvalidate <- reactiveTimer(120000) # reset map after two mins of inactivity
