@@ -62,7 +62,7 @@ last_entry <- function(tab) {
                 locationDate >= '{input$mindate}' ")
 
     if (!is.null(input$individuals)) {
-      sql <- glue("{sql} AND tagID in ({paste(input$individuals, collapse = ',')})")
+      sql <- glue("{sql} AND tagID in ({paste(input$individuals|>shQuote(), collapse = ',')})")
     }
 
     if (!is.null(input$locationClass)) {
